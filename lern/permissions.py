@@ -3,16 +3,24 @@ from rest_framework.permissions import BasePermission
 
 class OwnerPerms(BasePermission):
 
-    def has_permission(self, request, view):
-        if request.user == view.get_object().owner:
+    def has_object_permission(self, request, view, obj):
+        # if request.user == view.get_object().owner:
+        #     return True
+        # else:
+        #     return False
+        if request.user.pk == obj.owner:
             return True
-        else:
-            return False
+        return False
 
 
 class ModerPerms(BasePermission):
     def has_permission(self, request, view):
-        if request.user.is_staff:
-            return True
-        else:
+        if request.method in ['POST', 'DELETE']:
             return False
+        return request.user.is_staff
+
+
+class SuperPerms(BasePermission):
+
+    def has_permission(self, request, view):
+        return request.user.is_superuser

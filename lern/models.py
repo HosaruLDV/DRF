@@ -10,11 +10,10 @@ class Course(models.Model):
     image = models.CharField(max_length=250, verbose_name="превью")
     description = models.CharField(max_length=500, verbose_name='описание')
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE,
-                                     related_name='owner_course_get')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE)
 
     def __str__(self):
-        return f'{self.course_title},{self.image},{self.description},'
+        return self.course_title
 
     class Meta:
         verbose_name = 'курс'
@@ -28,8 +27,7 @@ class Lesson(models.Model):
     view_link = models.CharField(max_length=500, verbose_name='ссылка на видео')
     course_set = models.ForeignKey(Course, on_delete=models.CASCADE)
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE,
-                                     related_name='owner_lesson_get')
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', **NULLABLE)
 
     def __str__(self):
         return f'{self.lesson_title},{self.image},{self.description},{self.view_link}'
@@ -38,17 +36,3 @@ class Lesson(models.Model):
         verbose_name = 'урок'
         verbose_name_plural = 'уроки'
 
-
-class Payment(models.Model):
-    PAYMENT_CARD = 'card'
-    PAYMENT_CASH = 'cash'
-    PAYMENTS = (
-        (PAYMENT_CARD, 'карта'),
-        (PAYMENT_CASH, 'наличные')
-    )
-
-    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    payment_date = models.DateField(verbose_name='дата оплаты', null=True)
-    payment_course = models.CharField(max_length=250, verbose_name='название оплаченного курса')
-    payment_sum = models.PositiveIntegerField(verbose_name='сумма оплаты')
-    payment_type = models.CharField(choices=PAYMENTS, default=PAYMENT_CARD, max_length=10, verbose_name='тип оплаты')
