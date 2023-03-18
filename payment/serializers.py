@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.relations import SlugRelatedField
 
 from lern.models import Course
-from payment.models import Subscribe, Payment
+from payment.models import Subscribe, Payment, PaymentLog
 from users.models import User
 
 
@@ -25,3 +25,15 @@ class SubscribeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Subscribe
         fields = ('student', 'course')
+
+
+class PaymnetlogSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PaymentLog
+        fields = '__all__'
+
+
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = '__all__'

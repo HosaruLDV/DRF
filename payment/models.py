@@ -24,6 +24,18 @@ class Payment(models.Model):
         return f'{self.user},{self. payment_course},{self.payment_sum},'
 
 
+class PaymentLog(models.Model):
+    Success = models.BooleanField(verbose_name='успешность платежа')
+    ErrorCode = models.CharField(max_length=250, verbose_name='код ошибки')
+    TerminalKey = models.CharField(max_length=250, verbose_name='ключ терминала')
+    Status = models.CharField(max_length=250, verbose_name='статус платежа')
+    PaymentId = models.CharField(max_length=250, verbose_name='айди платежа')
+    OrderId = models.CharField(max_length=250, verbose_name='айди заявки')
+    Amount = models.IntegerField(verbose_name='сумма оплаты')
+    PaymentURL = models.URLField(verbose_name='ссылка на оплату')
+    PaymentDate = models.DateField(auto_now_add=True, verbose_name='дата создания')
+
+
 class Subscribe(models.Model):
 
     student = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Студент')

@@ -21,6 +21,7 @@ class LessonTestCase(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION=f'Bearer {self.access_token}')
 
     def test_course_create(self):
+        print(f'test1: Runed')
         response = self.client.post('/lern/course/',
                                     {
                                         "course_title": "Course5",
@@ -28,10 +29,11 @@ class LessonTestCase(APITestCase):
                                         "description": "test1"
                                     }
                                     )
-        print(f'test1: Runed')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_lesson_create(self):
+        print(f'test2: Runed')
         self.test_course_create()
         response = self.client.post('/lern/lesson/create/',
                                     {
@@ -42,18 +44,18 @@ class LessonTestCase(APITestCase):
                                         "course_set": 1
                                     }
                                     )
-        print(f'test2: Runed')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_lesson_destroy(self):
-        self.test_course_create()
+        print(f'test3: Runed')
         self.test_lesson_create()
         response = self.client.delete('/lern/lesson/destroy/1/')
-        print(f'test3: Runed')
+
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_lesson_udate(self):
-        self.test_course_create()
+        print(f'test4: Runed')
         self.test_lesson_create()
         response = self.client.patch('/lern/lesson/update/1/'
                                      , {
@@ -64,11 +66,11 @@ class LessonTestCase(APITestCase):
                                          "course_set": 1
                                      }
                                      )
-        print(f'test4: Runed')
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_getting_lessons_list(self):
-        self.test_course_create()
+        print(f'test5: Runed')
         self.test_lesson_create()
         """
             Тестирование получения списка студентов
@@ -91,9 +93,9 @@ class LessonTestCase(APITestCase):
                 }
             ]
         )
-        print(f'test4: Runed')
 
     def test_subscribe(self):
+        print(f'test6: Runed')
         self.test_course_create()
 
         response = self.client.post('/payment/subscribed/',
@@ -102,10 +104,11 @@ class LessonTestCase(APITestCase):
                                         "course": "Course5"
                                     }
                                     )
-        print(f'test5: Runed')
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_subscribe_status(self):
+        print(f'test7: Runed')
         self.test_subscribe()
 
         response = self.client.get('/lern/course/')
