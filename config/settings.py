@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'rest_framework_simplejwt',
+    'celery',
+    'django_celery_beat',
+
 
     'lern',
     'users',
@@ -111,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
 
@@ -147,3 +150,14 @@ REST_FRAMEWORK = {
 
 TERMINAL_KEY = '1677659270153DEMO'
 TERMINAL_PASSWORD = '9rgoqv88ygs8g7ed'
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+# CELERY_TIMEZONE = "Europe/Moscow"
+# CELERY_TASK_TRACK_STARTED = True
+# CELERY_TASK_TIME_LIMIT = 30 * 60
+
+EMAIL_HOST = 'smtp.mail.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'sdakhj@mail.ru'
+EMAIL_HOST_PASSWORD = 'FcbX3TVzJwLt4cNvr9AU'
+EMAIL_USE_SSL = True

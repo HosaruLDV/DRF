@@ -12,6 +12,7 @@ from lern.models import Course
 from payment.models import Subscribe, Payment, PaymentLog
 from payment.permisions import OwnerSubscribePerm
 from payment.serializers import SubscribeSerializer, PaymentSerializer, PaymnetlogSerializer
+from payment.tasks import payment_status_check
 from users.models import User
 
 
@@ -73,6 +74,7 @@ class PaymentAPIView(APIView):
             "TerminalKey": settings.TERMINAL_KEY,
             "Amount": course_item.price,
             "OrderId": order_id.pk,
+            "Description": "test",
             "Receipt": {
                 "Email": "a@test.ru",
                 "Phone": "+79031234567",
@@ -94,19 +96,18 @@ class PaymentAPIView(APIView):
         }
 
         response = requests.post('https://securepay.tinkoff.ru/v2/Init/', json=data_for_request)
-
-        PaymentLog.objects.create(
-            Success=response.json()['Success'],
-            ErrorCode=response.json()['ErrorCode'],
-            TerminalKey=response.json()['TerminalKey'],
-            Status=response.json()['Status'],
-            PaymentId=response.json()['PaymentId'],
-            OrderId=response.json()['OrderId'],
-            Amount=response.json()['Amount'],
-            PaymentURL=response.json()['PaymentURL']
-        )
-
+        print(response)
         if response.json()['Success']:
+            PaymentLog.objects.create(
+                Success=response.json()['Success'],
+                ErrorCode=response.json()['ErrorCode'],
+                TerminalKey=response.json()['TerminalKey'],
+                Status=response.json()['Status'],
+                PaymentId=response.json()['PaymentId'],
+                OrderId=response.json()['OrderId'],
+                Amount=response.json()['Amount'],
+                PaymentURL=response.json()['PaymentURL']
+            )
             Subscribe.objects.create(
                 student=self.request.user,
                 course=course_item

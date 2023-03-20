@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from lern.models import Course, Lesson
 from lern.permissions import OwnerPerms, ModerPerms
 from lern.serializers import CourseSerializer, LessonSerializer
+from payment.tasks import subscribed_message
 from payment.serializers import SubscribeSerializer
 from users.models import User
 
@@ -21,12 +22,12 @@ class CourseViewSet(viewsets.ModelViewSet):
         if self.request.user.is_staff:
             raise serializers.ValidationError('Модератор не может создавать уроки')
         else:
-            _mutable = request.data._mutable
+            # _mutable = request.data._mutable
             # set to mutable
-            request.data._mutable = True
+            # request.data._mutable = True
             # сhange the values you want
             request.data['owner'] = request.user.pk
-            request.data._mutable = _mutable
+            # request.data._mutable = _mutable
             answer = super().create(request, *args, **kwargs)
 
         return answer
@@ -45,6 +46,14 @@ class CourseViewSet(viewsets.ModelViewSet):
             request.data['owner'] = request.user.pk
             answer = super().create(request, *args, **kwargs)
         return answer
+
+    def perform_update(self, serializer):
+        self.object = serializer.save()
+        subscribed_message.delay(self.object.pk)
+
+    def perform_create(self, serializer):
+        self.object = serializer.save()
+        subscribed_message.delay(self.object.pk)
 
     def get_queryset(self):
         queryset = super().get_queryset()
