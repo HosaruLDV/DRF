@@ -15,6 +15,7 @@ RUN pip install drf-yasg
 RUN pip install eventlet
 RUN pip install eventlet
 RUN pip install python-dotenv
+RUN pip install psycopg2
 
 COPY . .
 
